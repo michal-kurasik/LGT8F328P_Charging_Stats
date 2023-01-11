@@ -7,8 +7,8 @@
 #include <TimeLib.h>
 
 #define FINISH_SOUND_TIME 3000
-#define START_CURRENT_THRESHOLD 0.02 // 20mA
-#define DISPLAY_REFRESH_RATE 500     // ms
+#define START_CURRENT_THRESHOLD 0.02 // 20 mA
+#define DISPLAY_REFRESH_RATE 500     // 500 ms
 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 32
@@ -22,8 +22,8 @@ Adafruit_INA219 ina219;
 bool measuring = false;
 bool finishing = false;
 uint64_t startMillis;
-uint64_t totalCapacity = 0;
 uint64_t totalTime = 0;
+uint32_t totalCapacity = 0;
 
 void setup()
 {
@@ -122,9 +122,11 @@ float getPower()
 void displayWelcome()
 {
   display.clearDisplay();
-  display.setCursor(0, 0);
-  display.setTextSize(3);
-  display.print("WELCOME");
+  display.setCursor(28, 0);
+  display.setTextSize(2);
+  display.print("INSERT");
+  display.setCursor(22, 16);
+  display.println("BATTERY");
   display.display();
 }
 
@@ -159,7 +161,6 @@ void displaySummary(int time, int capacity, float voltage)
   display.print("V");
 
   display.setTextSize(1);
-
   display.setCursor(88, 25);
   display.print(timeBufferH);
   display.setCursor(98, 25);
@@ -188,7 +189,6 @@ void displayUpdate(int time, float current, float voltage, int capacity)
   sprintf(timeBufferH, "%d", hour(time));
   sprintf(timeBufferM, "%02d", minute(time));
   sprintf(timeBufferS, "%02d", second(time));
-
   sprintf(capacityBuffer, "%04d", capacity);
   sprintf(currentDecBuffer, "%02d", (int)((current * 100) - ((int)current * 100)));
 
@@ -200,7 +200,6 @@ void displayUpdate(int time, float current, float voltage, int capacity)
   display.print(timeBufferM);
   display.setCursor(44, 0);
   display.print(timeBufferS);
-
   display.setCursor(8, 0);
   display.print(":");
   display.setCursor(36, 0);
